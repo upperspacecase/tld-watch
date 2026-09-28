@@ -1,0 +1,11 @@
+PRINCIPLE 1: Availability Heuristic (#104)
+  Why it fits: Every target visitor arrives 4 days after the Sept 24 .shop zone failure with the outage still vivid, so the page converts best when it makes that exact incident the centerpiece instead of describing outages in the abstract.
+  How to apply: Make the hero a rendered incident timeline for the Sept 24 .shop failure built only from real, linkable timestamps (the HN thread 49833541 comments and any registry notice), with one annotated marker reading "alert would have fired here" at the earliest multi-vantage NXDOMAIN evidence, and a second timeline row for the Sept 2025 .space failure from thread 45359627; do not fabricate probe data, link each marker to its source comment.
+
+PRINCIPLE 2: Spark Effect (#26)
+  Why it fits: Sign-ups come from a single HN comment click and cold DMs, so each visitor has seconds of intent and will bounce if the ask is bigger than "email plus TLD".
+  How to apply: Put one form directly under the timeline with exactly two inputs, an email field and a single-select TLD chip row (.shop .space .club .store), preselect the chip from a ?tld= query param embedded in the HN comment link and each DM link so most visitors only type an email and press one button, and require no password, account, or site URL.
+
+PRINCIPLE 3: Social Proof (#30)
+  Why it fits: The DM targets are the very people quoted in the threads, and seeing peers with the same 5-100-client-site profile describe the same outage tells them this page is for them, not for enterprise SRE teams.
+  How to apply: Place two or three verbatim, hyperlinked HN quotes beside the form (e.g. mehphp "customer just reached out and my .shop is down", simonv3 flipping DNS between Cloudflare and Namecheap) each tagged with the TLD it concerns, and only replace them with a live "N agencies watching .shop" counter once the real count for that TLD reaches five, never before.

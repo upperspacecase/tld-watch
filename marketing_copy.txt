@@ -1,0 +1,17 @@
+HOOK: When a client's .shop store goes dark, know within minutes whether every .shop store went dark with it.
+
+SUBHEADLINE: For agencies and WooCommerce hosts with client stores on .shop, .space, .club and .store: stop flipping DNS between Cloudflare and Namecheap for three hours when the fault is inside the registry zone.
+
+VALUE_PROP:
+Canary domains on each new gTLD are resolved from multiple vantage points, around the clock.
+When the canaries stop resolving, you get an alert naming the TLD and the time it started, not a ticket saying one site is down.
+Send your client the public status page link instead of a post-mortem for something you did not break.
+
+CTA: Start watching my TLDs
+
+SECONDARY_CTA: View live .shop status
+
+OBJECTIONS:
+- "UptimeRobot already tells me the site is down." It tells you one site is down. It cannot tell you every .shop is, so you still spend the next hour tearing apart your own stack.
+- "A whole TLD failing is a once-a-decade thing." .space failed in September 2025 and .shop failed on September 24, 2026, both registry-side, and one agency in the .shop thread reported client damage in the thousands. The status page costs nothing to check either way.
+- "Knowing it's the registry doesn't bring the store back." No, but it stops you changing nameservers, reissuing certs and rebuilding caches on a working stack, and it gives you a link that tells the client the registry broke it, not you.

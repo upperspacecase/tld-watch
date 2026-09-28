@@ -1,0 +1,18 @@
+SCORE: 7/10
+
+TOP 3 FIXES:
+
+1. **Put the "how" above the fold.** The mechanism that makes the headline believable (canary domains, 60s probe cadence, three vantage points, alert on 2 of 3 agreeing) only appears inside the demo video, the meta description, and the post-submit success message. Replace the form's reassurance line in `components/SignupForm.tsx` ("No account, no password, no site URL. Email plus one TLD.") with one sentence of mechanism, e.g. "Canary domains on each TLD, resolved every 60 seconds from Frankfurt, Singapore and Virginia. You get an email when 2 of 3 disagree with the registry." Keep the no-account line as a second, shorter sentence if you want it. Only state cadence and locations you will actually run.
+
+2. **Promote the real proof and fix the unanchored number.** The strongest fact on the page (GMO Registry's confirmed 16:11 to 21:54 UTC fault on Sept 24) is buried in slate-500 caption text under the demo. Add it as an eyebrow line above the H1 in `app/page.tsx`: "Sept 24, 2026: the .shop registry zone failed for 5 h 43 min. Source: GMO Registry, via HN." with the existing `SHOP_THREAD` link. At the same time, the subhead's "for three hours" has no source in the thread evidence; replace it with the real duration or cut the number.
+
+3. **Delete or relabel the logo strip.** Grey wordmarks in a row read as a "trusted by" bar no matter what the caption says, and GMO Registry and Hacker News are not "tools agencies were switching between," so the label contradicts the list. Fastest fix: remove the `LogoStrip` import and element from `app/page.tsx`. If you keep it, cut GMO Registry and Hacker News so the list matches the caption.
+
+GREEN FLAGS:
+
+- **Headline passes all three Dry tests.** You can see it (a client's .shop store going dark), you can falsify it (within minutes, registry-wide or not), and UptimeRobot, RIPE DNSMON, and registrar status pages cannot sign it. One promise, no adjectives.
+- **Audience is named in the first line of the subhead** with the exact TLDs, and the "flipping DNS between Cloudflare and Namecheap" detail is lifted straight from simonv3's behaviour in the .space thread. Reads like the customer wrote it.
+- **The demo shows the before and after concretely:** mehphp's real quote in the inbox, then the reply "Not our stack," then the alert card with "17 of 20 canary domains NXDOMAIN from 3 of 3 vantage points." That is the whole tension arc in one loop.
+- **Honesty is visible.** "Simulation" is labelled twice and the source quote is attributed by username. That is the right call for a pre-launch page.
+- **CTA is a benefit, not a label,** and the form asks for exactly what the hypothesis needs (email plus one TLD). Small nit: the button says "my TLDs" while the form and reassurance line take one TLD. Since `tld` is already in state, "Start watching .{tld}" is a one-line change.
+- **Success state restates the promise** in the same concrete terms as the headline instead of a generic "thanks."

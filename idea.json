@@ -1,0 +1,151 @@
+{
+  "status": "passed",
+  "killed_at_stage": null,
+  "kill_reason": null,
+  "stage_2": {
+    "customer": "Owner-operators and support leads at small web agencies and managed WordPress/WooCommerce hosts (5-100 client sites) who registered client storefronts on new gTLDs (.shop, .space, .club, .store) and are the first line of support when a client's store goes dark. Evidence from the thread itself: esher ('a client asked in support'), mehphp ('customer just reached out and my .shop is down'), RootSniper ('our client has suffered serious damage in the thousands'), swrobel (emailed GMO Registry and asked 'where is it monitored'). Same profile in the Sept 2025 .space thread: ustad ('becoming quite serious and I don't know what to do'), simonv3 (flipped DNS between Cloudflare and Namecheap trying to fix a registry-side fault).",
+    "where": "HN (Ask HN threads recur per TLD outage), r/webhosting, r/webdev, r/sysadmin, r/msp, WebHostingTalk forums, LowEndTalk, Namecheap and Cloudflare community forums, MainWP/ManageWP user Facebook groups (The Admin Bar), WHMCS community.",
+    "pays_for": "Uptime monitoring (UptimeRobot, Better Stack, Pingdom, StatusCake: $7-$50/mo), DNS/registrar (Cloudflare, Namecheap, Spaceship), client-fleet management (MainWP, ManageWP, WHMCS), managed WooCommerce hosting per client site."
+  },
+  "stage_3": {
+    "real_posts": [
+      "https://news.ycombinator.com/item?id=45359627",
+      "https://news.ycombinator.com/item?id=28790405",
+      "https://news.ycombinator.com/item?id=26876237",
+      "https://news.ycombinator.com/item?id=15725502",
+      "https://news.ycombinator.com/item?id=8940980",
+      "https://news.ycombinator.com/item?id=12778214"
+    ],
+    "urgent": "Incident confirmed by GMO Registry in-thread: Sept 24 2026, 16:11-21:54 UTC, .shop names intermittently missing from the zone due to a zone-generation fault. Commenters were actively flailing during the window (switching DNS providers, re-adding NS records, emailing the registry and waiting a day for a reply). swrobel explicitly asked 'where is it monitored' and got no answer. The .space thread (Sept 2025) shows the same pattern: ustad begging for escalation, HiryuSingh observing the .space zone dropped from 973,093 to 447,730 domains. Agencies that just ate a client escalation four days ago are in the window to adopt a fix this week. Searches that found nothing extra: Reddit JSON search (blocked, 403), DuckDuckGo lite (blocked); HN Algolia queries 'tld down', 'registry outage dns', '.io domain outage', 'gTLD nameservers down', 'is .co down' produced the six threads above.",
+    "valuable": "Per incident: ~6 hours of storefront downtime (RootSniper: client losses 'in the thousands'); 2-4 staff hours per agency burned on misdiagnosis (DNS provider swaps, NS re-adds, registry emails) before someone confirms it is registry-wide; client-trust damage that led at least one agency to swear off new gTLDs. Frequency: at least one TLD-wide outage per year surfaces on HN alone (.co 2015, .ai 2016, .eu 2017, .ws 2021, .club 2021, .space 2025, .shop 2026)."
+  },
+  "stage_4": {
+    "software": [
+      "UptimeRobot / Better Stack (https://uptimerobot.com, https://betterstack.com/uptime): alert that a single site is down but cannot tell the agency it is the whole TLD, so they still misdiagnose and flail for hours.",
+      "RIPE Atlas DNSMON (https://dnsmon.ripe.net): monitors TLD authoritative nameserver reachability for registry operators; no agency-facing alerts, and would not have caught the .shop fault because nameservers were up while individual names were missing from the zone.",
+      "Registrar status pages, e.g. Namecheap status-updates (https://www.namecheap.com/status-updates/): reactive, posted only after the registrar notices, per-registrar, no push alerts, and useless if your registrar is not the one that posted."
+    ],
+    "workarounds": [
+      "Post 'Ask HN: is .X down?' and wait for strangers to confirm (the exact behavior in every thread found).",
+      "Cargo-cult DNS fixes: switch DNS provider, remove and re-add NS records (simonv3, mdaspaceguy2) which coincidentally line up with the registry recovering.",
+      "Email the registry and wait a day (swrobel), then tell clients to avoid new gTLDs for serious business (RootSniper)."
+    ],
+    "graveyard": "GitHub repo searches for 'tld monitor dns', 'tld status dns outage', 'registry nameserver monitoring tld' returned only pawal/dnssec-monitor (35 stars, DNSSEC-focused, last push Jan 2019). No archived TLD-status projects found. tldstatus.com and tldhealth.com resolve but serve no content (empty/parked). No well-funded direct solution exists; nothing has died here because nobody has shipped an agency-facing TLD status product."
+  },
+  "stage_5": {
+    "chosen_approach": "Public per-TLD status page with canary-based outage alerts: every 60s resolve nic.<tld> plus ~20 known-live domains per new gTLD from 3+ vantage points; flag a TLD as degraded when canaries fail across vantage points; agencies subscribe (email/webhook) to the TLDs their clients use. Wins the customer lens (an alert saying 'it is .shop, not you' before the client calls), the growth lens (the status page becomes the link pasted into every future 'Ask HN: is .X down' thread and registrar support reply), and the money lens (agency pays per-TLD alert subscription right after eating an incident).",
+    "killed_approaches": [
+      "On-demand 'is it me or the TLD?' diagnostic page: ships in a day but only helps after the agency is already flailing, and nobody pulls out a card for a free dig wrapper.",
+      "Annual TLD reliability scorecard for choosing client domains: content play with no urgency and no recurring payment moment; nobody pays to be told .shop had a bad day last year."
+    ]
+  },
+  "stage_6": {
+    "hypothesis": "We believe owner-operators of small web agencies and managed WooCommerce hosts with client stores on new gTLDs will use tld_watch (a public per-TLD status page with canary-based outage alerts) because it's the only way to know within minutes that an outage is registry-wide and not their stack, better than UptimeRobot (site-level only), RIPE DNSMON (registry-operator tooling that misses zone-content faults), and registrar status pages (reactive, no alerts). We'll know we're right if 10 people submit an email plus at least one TLD to watch from one comment in the live .shop HN thread plus 15 cold DMs to .shop and .space thread commenters within 5 days.",
+    "test_signal": "10 alert sign-ups (email + selected TLD) from one HN comment in thread 49833541 plus 15 cold DMs to commenters in threads 49833541 and 45359627.",
+    "test_deadline": "5 days from launch of the status page."
+  },
+  "app_name": "tld_watch",
+  "summary": "Public status page and alert service that continuously resolves canary domains per new gTLD from multiple vantage points and tells agencies within minutes when a registry-wide outage (like the Sept 24 2026 .shop zone failure) is the cause, not their stack.",
+  "tech_stack": "Next.js + TypeScript + Tailwind CSS",
+  "id": "hn_49833541",
+  "title": "Ask HN: Are .shop domains down?",
+  "url": "https://news.ycombinator.com/item?id=49833541",
+  "source": "hackernews",
+  "score": 6,
+  "num_comments": 8,
+  "original_body": "Anyone else seeing this? Or am I missing something obvious? A client asked in support. AI is very confident about it. Looks legit.<p>apple.shop, pokemon.shop ...",
+  "subreddit": "Ask HN",
+  "_kill_report": "KILLS -- 2026-09-28\n\nTotal candidates evaluated: 26\nKilled: 25  |  Passed to MVP: 1\n\nBy stage:\n  Stage 1 (signal):       18 killed\n  Stage 2 (customer):     0 killed\n  Stage 3 (problem):      4 killed\n  Stage 4 (alternatives): 3 killed\n  Stage 5 (approach):     0 killed\n  Stage 6 (hypothesis):   0 killed\n",
+  "_total_evaluated": 26,
+  "_total_killed": 25,
+  "_runners_up": [
+    {
+      "status": "killed",
+      "killed_at_stage": 4,
+      "kill_reason": "The customer's actual purchase already exists as a mature multi-vendor category: NIXSYS sells 12 ISA-slot DOS-capable PCs at $1,000-$1,515 (verified on nixsys.com), plus RamPC, ESA PC Solutions (esapcsolutions.com, recommended on Practical Machinist), and IEI/Avalue PICMG 1.0 SBCs, with Industrial Monitor Direct publishing step-by-step ISA/IRQ/DMA migration guides. The only genuinely unmet piece is real-time ISA bridging to modern buses, which is hardware/FPGA engineering: the three open-source attempts (ISASTM, FrankenPiFPGA, dosbox-svn-usb-isa) all stalled at 'experimental' for structural reasons (ISA DMA/IRQ timing over USB, one-off per-card driver work, fragmented tiny market per instrument model) that have not changed. A Next.js MVP cannot touch that layer, and a directory/matching layer on top of the existing vendors has no differentiator I can state beyond a Google search for 'ISA slot computer'. The parallel-port dongle segment is license-circumvention territory and is off the table. The dBase/Clipper segment is a different customer (app migration consulting) already served by Harbour/xHarbour and AI-migration shops.",
+      "stage_2": {
+        "customer": "Owner-operators and maintenance leads at 1-20 person job shops and QC labs running late-1980s to 1990s PC-based controls that depend on a proprietary ISA card: Prototrak MX2 (486, boots from floppy), Omniturn (ISA motion card), Hurco Ultimax, Heidenhain PC-based controls, Thermo/CE Chrom-Card GC data systems (ISA A/D board + dongle), Plasmatherm etch tools at university fabs (MIT labnetwork thread). The person is the one who owns the machine and loses production when the controller PC dies, not an IT department.",
+        "where": "practicalmachinist.com CNC Machining forum, cncarena.com/CNCZone electronics subforum, bbs.homeshopmachinist.net Digital Machinist, chromforum.org (Chromatography Forum), MIT labnetwork mailing list (mtl.mit.edu/pipermail/labnetwork), grassrootsmotorsports.com off-topic, forum.vcfed.org, r/Machinists, r/vintagecomputing",
+        "pays_for": "ISA-slot industrial PCs from NIXSYS ($1,000-$1,515 per box, verified), used ISA motherboards and cards on eBay (one shop reported 4 replacement motherboards for $250 over 15 years; ISA VGA cards listed at $800), Chrom-Card USB replacement boards from Thermo (vendor upgrade path), controller retrofits (LinuxCNC/Mach3/Centroid, price not verified in this session), stockpiled $50 recycler PCs for parts"
+      },
+      "stage_3": {
+        "real_posts": [
+          "https://www.practicalmachinist.com/forum/threads/controller-pc-dies-on-an-out-of-support-machine-what-do-you-do.450720/",
+          "https://www.chromforum.org/viewtopic.php?t=12311",
+          "https://grassrootsmotorsports.com/forum/off-topic-discussion/anyone-speak-old-pc-motherboards-isa-buss-on-vintage-cnc-machines/186735/page1/",
+          "https://bbs.homeshopmachinist.net/forum/digital-machinist/40825-a-crossroads-what-to-do-with-my-ancient-cnc-control",
+          "https://mtl.mit.edu/pipermail/labnetwork/2020-September/004404.html",
+          "https://www.chromforum.org/viewtopic.php?p=26336&t=5714",
+          "https://www.technibble.com/forums/threads/isa-eisa-card-replacement-pci-connection.91962/"
+        ],
+        "urgent": "Urgency is break/fix: when the controller PC dies the machine or instrument is down until a working ISA host is sourced. The Practical Machinist thread is literally titled 'Controller PC dies on an out-of-support machine, what do you do?'. The Heidenhain case required writing a custom device driver after the discontinued ISA card could only be replaced by a PCI card. Chrom-Card users report 'chrom card not found in your computer' errors that halt GC data collection. This is urgent on the day of failure, not continuously.",
+        "valuable": "Cost is a stopped production machine or lab instrument for the days it takes to source hardware. Buyers demonstrate willingness to pay $1,000-$1,515 for a NIXSYS ISA-slot PC and up to $800 for a single scarce ISA card on eBay. One shop stockpiles 4 spare motherboards. Exact per-day downtime dollars were not stated in any post I retrieved."
+      },
+      "stage_4": {
+        "software": [
+          "DOSBox-X / 86Box (emulate DOS but cannot pass through a physical ISA motion or A/D card; useless for the hardware-bound customer)",
+          "dosbox-svn-usb-isa (github.com/thomasamendt/dosbox-svn-usb-isa): DOSBox fork that talks to USB-ISA hardware, self-labelled experimental, not usable for real-time motion control",
+          "Industrial Monitor Direct knowledge-base guides plus NIXSYS / RamPC / ESA PC Solutions / IEI PICMG ISA industrial PCs: the actual working answer today, 4+ vendors, $1,000-$1,515, supports MS-DOS through XP; insufficient only in that the buyer must discover them and hand-migrate IRQ/DMA and disk images"
+        ],
+        "workarounds": [
+          "Stockpile used 486/Pentium boxes and ISA motherboards from eBay and recyclers ($50 each) as cold spares",
+          "Full controller retrofit to LinuxCNC/Mach3/Centroid, keeping the drives and scrapping the ISA card and original software",
+          "Vendor-specific replacement board (Thermo Chrom-Card USB) where the OEM still exists, otherwise keep the old PC on a shelf and never touch it"
+        ],
+        "graveyard": "ISASTM (github.com/Manawyrm/ISASTM, STM32 ISA-over-USB, 2020) and FrankenPiFPGA (Raspberry Pi + Cyclone IV ISA card emulator, 2022) are hobbyist retro-gaming projects targeting sound cards, never productized for industrial cards. dosbox-svn-usb-isa is stalled experimental. They stalled for structural reasons that still hold: ISA DMA and IRQ latency cannot be reliably bridged over USB for motion control or A/D sampling, every instrument needs one-off driver work, and the addressable market per card model is dozens of shops, not thousands. Meanwhile PICMG ISA SBCs already solve the non-real-time-bridging need directly."
+      },
+      "stage_5": null,
+      "stage_6": null,
+      "id": "hn_49848955",
+      "title": "Ask HN: Who's still keeping a DOS machine up because the business depends on it?",
+      "url": "https://news.ycombinator.com/item?id=49848955",
+      "source": "hackernews",
+      "score": 269,
+      "num_comments": 290
+    },
+    {
+      "status": "killed",
+      "killed_at_stage": 4,
+      "kill_reason": "The problem is real (dozens of posts, two Anthropic postmortems) but the market for a product is dead. (1) marginlab.ai already runs a free, rigorous daily SWE-bench-Pro degradation tracker for Claude Code and Codex, last updated Sep 27 2026 (yesterday), with statistical degradation detection. (2) The consumer-verdict variant, isitcooked.ai ('Is it cooked? Receipts included'), already exists and has gone stale: last run 2026-08-10, seven weeks ago, which is the graveyard pattern. (3) The structural reason it dies has not changed: marginlab's founder states on HN that meaningful daily runs cost $100-150/day and 'daily confidence intervals are quite large and not super useful,' while the audience is explicitly price-sensitive (post author: 'not going to be able to afford anything close to that'; the whole thread is about $500 being too much). Nobody paying $200/mo and angry about it pulls out a card for a $5/mo 'is it dumber today' verdict they can get free from marginlab, r/ClaudeAI in real time, or the vendor's own postmortems. (4) The vendor is closing the gap itself: Anthropic 'added continuous production monitoring' and published a detailed postmortem in Sep 2025. I cannot name a differentiator that survives a free, live, more rigorous incumbent plus a dead consumer clone.",
+      "stage_2": {
+        "customer": "Individual software developers paying $100-200/mo for a Claude Max (5x/20x) or ChatGPT Pro subscription who use Claude Code or Codex CLI as their primary daily coding tool, have lived through at least one 'it got dumber' episode (Aug-Sep 2025 Claude routing bugs, Apr 2026 reasoning-effort cut), and cannot tell whether a bad day is real degradation, a silent model swap, or their own perception. The post author is one: on a 5x/20x plan, price-capped well below $500, and suspects label-switching.",
+        "where": "r/ClaudeAI (the 'Claude is getting dumber' threads recur monthly), r/ClaudeCode, r/ChatGPTPro ('Did they nerf ChatGPT Plus?'), r/ChatGPTCoding, r/LocalLLaMA (as the escape hatch), community.openai.com, Anthropic Discord #claude-code, HN 'Ask HN' threads on subscription pricing and degradation, the Claude Code GitHub issues tracker (issue #19468 'Systematic Model Degradation and Silent Downgrading').",
+        "pays_for": "$200/mo Claude Max 20x or ChatGPT Pro; often a second $20-200/mo sub (Cursor, Codex, Gemini) as a hedge; API pay-as-you-go top-ups when the sub feels throttled; some pay for aggregator routers (OpenRouter) specifically to be able to switch models when one feels off."
+      },
+      "stage_3": {
+        "real_posts": [
+          "https://www.reddit.com/r/ClaudeAI/comments/1d1es0z/claude_s_getting_dumber/",
+          "https://www.reddit.com/r/ClaudeAI/comments/1deflq9/is_there_a_reason_claude_seems_more_dumb_lately/",
+          "https://www.reddit.com/r/ChatGPT/comments/1d9djdo/gpt_gets_progressively_worse/",
+          "https://www.reddit.com/r/ChatGPTPro/comments/1ix4wcw/did_they_nerf_chatgpt_plus/",
+          "https://community.openai.com/t/the-model-is-getting-better-technically-but-worse-experientially/1369262",
+          "https://news.ycombinator.com/item?id=45176145",
+          "https://claudeissues.com/issue/19468-bug-systematic-model-degradation-and-silent-downgrading-in-claude-code"
+        ],
+        "urgent": "During degradation windows, cancellations pile up within days: HN commenter on Sep 9 2025: 'reports of subscription cancellations piled up... Why pay $200 a month if your productivity boost can randomly turn [off]'. Anthropic's postmortem confirmed ~30% of Claude Code users active in the Aug 2025 window had at least one request misrouted to a degraded path, and the same user got hit repeatedly. Developers with workflows built on the tool 'were suddenly watching their productivity tank' (unite.ai, Sep 19 2025). People act (cancel, switch to API, switch vendor) the same week.",
+        "valuable": "$200/mo subscription at risk per user; six-week degradation window in Aug-Sep 2025 before the vendor diagnosed it; marginlab's tracker shows 7-day pass rates of 76% (Claude Code) and 64% (Codex) vs 30-day 82%/81%, i.e. measurable week-to-week swings. No post I found quantifies hours/week lost; the cost is dollars on a sub plus an undocumented productivity drop."
+      },
+      "stage_4": {
+        "software": [
+          "marginlab.ai Degradation Trackers (https://marginlab.ai): free, daily SWE-bench-Pro runs against Claude Code and Codex with statistical degradation detection, 7-day and 30-day pass rates, updated Sep 27 2026. Insufficient only in that it tests one account, so it cannot see per-user routing bugs like the Aug 2025 one, and its founder admits daily CIs are too wide to be useful.",
+          "isitcooked.ai (https://isitcooked.ai): 'The same tests, every model, every day... the verdict flips. Receipts included.' Ten use-case suites across ~20 models with COOKED/SUSPICIOUS verdicts. Insufficient because it is stale: last run 2026-08-10, seven weeks ago.",
+          "LMArena / SWE-bench / Aider leaderboards plus status.anthropic.com and the vendor's own postmortems: insufficient because arena tests raw API endpoints, not the consumer chat or CLI path where the silent routing/effort changes happen, and status pages only report after the vendor admits a problem."
+        ],
+        "workarounds": [
+          "The 'mental gut-feeling degeneration tracker' (verbatim from HN 46553909): notice it feels worse, go check r/ClaudeAI to see if others are complaining today.",
+          "Keep a personal golden prompt or small task and re-run it when things feel off, comparing to a remembered good output.",
+          "Hedge with a second subscription or API key and switch vendors for the day; or just cancel and resubscribe later."
+        ],
+        "graveyard": "isitcooked.ai went stale after ~2 months (last run Aug 10 2026, today is Sep 28 2026). marginlab's tracker survives only as a marketing surface for its open-source eval runtime, funded by a $200/mo Pro sub and explicitly under-sampled ('would be about $100-150/day in API costs'). GitHub search 'llm model degradation tracker' returns 3 repos, the only relevant one (lohitganugula/Model-regression-detector) has 1 star and targets CI pipelines, not subscribers. Structural cause: rigorous daily detection costs $3-4.5k/mo per agent, the noise floor requires weekly aggregation which defeats 'is it cooked today', and the audience refuses to pay. None of that has changed; the vendor has meanwhile added its own production monitoring and postmortems, shrinking the gap further."
+      },
+      "stage_5": null,
+      "stage_6": null,
+      "id": "hn_49838409",
+      "title": "Ask HN: How do you feel about the new $500 OpenAI subscription?",
+      "url": "https://news.ycombinator.com/item?id=49838409",
+      "source": "hackernews",
+      "score": 5,
+      "num_comments": 12
+    }
+  ]
+}

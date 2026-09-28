@@ -1,0 +1,18 @@
+Done. The tld_watch MVP is built in `builds/tld_watch_20260928_1329`, the production build passes, lint is clean, and I verified the page in a real browser at 375, 768, 1024 and 1440 with no horizontal overflow.
+
+**What's there**
+
+- **Hero** with the CMO hook and subheadline verbatim, and a glass-panel form with exactly two inputs: a TLD chip row (.shop .space .club .store) and an email field. The chip preselects from `?tld=` in the link, so an HN comment or DM link like `/?tld=space` leaves only the email to type. No account, password or site URL.
+- **Remotion demo** in `remotion/Demo.tsx`, 8 seconds, looping, muted, no controls. It plays mehphp's real HN quote typing into a support inbox, three vantage points probing 20 .shop canaries that go NXDOMAIN, the resolution-rate line dropping with an "alert fired" marker, the alert card saying "It is the .shop registry zone, not your stack", and the reply to the client. The on-screen label and the caption under it call it a simulation and link the real 16:11 to 21:54 UTC window from GMO Registry's note in the thread.
+- **Logo strip** of six text-as-logo names (Cloudflare, Namecheap, WooCommerce, UptimeRobot, GMO Registry, Hacker News) captioned honestly as the tools agencies were switching between during the outages, not as customers or press.
+- **Footer** with Privacy, Terms and both HN thread links. Privacy and Terms are tiny static pages stating what the form collects.
+
+**Sign-up capture.** The form posts to `/api/subscribe`, which validates email plus TLD, writes a JSON line to the server log (visible in Vercel's function logs) and forwards to a webhook if `SIGNUP_WEBHOOK_URL` is set. I tested it end to end in the browser: a submission returned the confirmation state, was stored in localStorage, and appeared in the server log. Invalid input returns 400.
+
+**Choices I made that you should know about**
+
+- The demo's vantage names and canary counts are simulated and labeled as such. I did not place an "alert would have fired here" marker at a real timestamp because I have no real probe data or comment IDs, only the registry window, which is what the caption states.
+- The CTA uses the mockup's blue rather than the design system's orange, since the mockup is the north star and the one-accent rule applies.
+- I left out the secondary "View live .shop status" CTA and any separate testimonial block, per the one-action and forbidden-section rules. The one HN quote lives inside the demo.
+- No Contact link in the footer because I had no address or URL to point it at that would be real.
+- Nothing is committed. A stale Next server from another project was holding the test port during verification; I killed it. The build directory looks gitignored at the repo root, so check that before committing.
